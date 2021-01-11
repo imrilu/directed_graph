@@ -1,20 +1,19 @@
-from typing import List
 import json
-import queue as queue
 import os
 import matplotlib.pyplot as plt
 from numpy import random
-from NodeData import NodeData
-from EdgeData import EdgeData
 from pathlib import Path
-import math
 from GraphAlgoInterface import GraphAlgoInterface
 from DiGraph import DiGraph
+
 
 class GraphAlgo(GraphAlgoInterface):
 
     def __init__(self, g=None):
-        self.dwg_alg = g
+        if g is None:
+            self.dwg_alg = DiGraph()
+        else:
+            self.dwg_alg = g
         self.d1 = {}
         self.p1 = {}
 
@@ -33,7 +32,14 @@ class GraphAlgo(GraphAlgoInterface):
         file_name = file_name.split('\\')
         base_path = Path(__file__).parent
         # TODO: generalize
-        file_path = (base_path / file_name[1] / file_name[2]).resolve()
+        file_path = ""
+        for i in range(len(file_name) - 1):
+            if file_name[i].startswith(".."):
+                continue
+            file_path += file_name[i] + '/'
+        file_path += file_name[len(file_name) - 1]
+
+        file_path = (base_path / file_path).resolve()
 
         with open(file_path, 'r') as fp:
             data = json.load(fp)
@@ -52,14 +58,14 @@ class GraphAlgo(GraphAlgoInterface):
 
     def save_to_json(self, file_name):
         nodes = self.dwg_alg.getV()
-        edges = self.dwg_alg.getE()
+        edges = self.dwg_alg.get_all_e()
         nodes_parsed = []
         edges_parsed = []
         for v in nodes:
             if v.getLocation() is not None:
-                temp_node = {'id': v.getSrc(), 'pos': v.getLocation()}
+                temp_node = {'id': v.getKey(), 'pos': v.getLocation()}
             else:
-                temp_node = {'id': v.getSrc()}
+                temp_node = {'id': v.getKey()}
             nodes_parsed.append(temp_node)
         for e in edges:
             if e.getWeight() is not None:
@@ -72,7 +78,7 @@ class GraphAlgo(GraphAlgoInterface):
         try:
             os.remove(file_name)
         except OSError:
-            return False
+            pass
         with open(file_name, 'x') as fp:
             json.dump(file, fp)
             return True
@@ -161,10 +167,13 @@ class GraphAlgo(GraphAlgoInterface):
         nodes_graphics = []
         for n in nodes.values():
             if n.getLocation() is not None:
-                nodes_graphics.append(plt.Circle((n.getLocation()[0], n.getLocation()[1]), 0.05, color='r'))
+                nodes_graphics.append(plt.Circle((n.getLocation()[0], n.getLocation()[1]), 0.06, color='b'))
+                plt.text(n.getLocation()[0], n.getLocation()[1], n.getKey(), fontweight='bold', ha="center", va="center", color='w')
             else:
-                nodes_rand_locations[n.getKey()] = (random.uniform(-xlim, xlim), random.uniform(-ylim, ylim))
-                nodes_graphics.append(plt.Circle(nodes_rand_locations[n.getKey()], 0.05, color='b'))
+                rand_loc = (random.uniform(-xlim, xlim), random.uniform(-ylim, ylim))
+                nodes_rand_locations[n.getKey()] = rand_loc
+                nodes_graphics.append(plt.Circle(nodes_rand_locations[n.getKey()], 0.06, color='b'))
+                plt.text(rand_loc[0], rand_loc[1], n.getKey(), fontweight='bold', ha="center", va="center", color='w')
 
         for e in edges:
             src_location = nodes_rand_locations[e.getSrc()]
