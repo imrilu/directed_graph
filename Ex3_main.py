@@ -1,6 +1,7 @@
 from DiGraph import DiGraph
 from GraphAlgo import GraphAlgo
-
+from nx_plot import plot_graph_nx
+import time
 
 def check():
     """
@@ -46,6 +47,8 @@ def check0():
     g_algo = GraphAlgo(g)
     print(g_algo.shortest_path(0, 3))
     g_algo.plot_graph()
+    plot_graph_nx(g)
+
 
 
 def check1():
@@ -82,27 +85,32 @@ def check2():
     print(dist, path)
     print(g_algo.connected_component(0))
     print(g_algo.connected_components())
-    # g_algo.plot_graph()
+    g_algo.plot_graph()
+    # plot_graph_nx(g_algo.get_graph())
 
+
+def checkTimes():
+
+    g_algo = GraphAlgo()
+
+    file = '../data/A5'
+    g_algo.load_from_json(file)
+    start = time.time()
+    g_algo.plot_graph()
+    end = time.time()
+    print("our plot:", end - start)
+    start = time.time()
+    plot_graph_nx(g_algo.get_graph())
+    end = time.time()
+    print("network x:", end - start)
 
 if __name__ == '__main__':
-    # g = DiGraph()  # creates an empty directed graph
-    # for n in range(4):
-    #     g.add_node(n)
-    # g.add_edge(0, 1, 1)
-    # g.add_edge(1, 0, 1.1)
-    # g.add_edge(1, 2, 1.3)
-    # g.add_edge(2, 3, 1.1)
-    # g.add_edge(1, 3, 1.9)
-    # g.remove_edge(1, 3)
-    # g.add_edge(1, 3, 10)
-    # print(g)  # prints the __repr__ (func output)
-    # print(g.get_all_v())  # prints a dict with all the graph's vertices.
-    # print(g.all_in_edges_of_node(1))
-    # print(g.all_out_edges_of_node(1))
-    # g_algo = GraphAlgo(g)
-    # g_algo.save_to_json("file.json")
-    # g_algo.load_from_json("file.json")
-    # check0()
-    check1()
-    # check2()
+    g_algo = GraphAlgo()
+    file = '../data/A5'
+    g_algo.load_from_json(file)
+    g_algo.get_graph().remove_edge(13, 14)
+    g_algo.save_to_json(file + "_edited")
+    start = time.time()
+    g_algo.connected_component(0)
+    end = time.time()
+    print("time:", end - start)

@@ -201,10 +201,12 @@ class DiGraph(GraphInterface):
         """
         Returns a string representing the directed graph
         """
-        s = "-----\nDiGraph: \nNodes:\n"
+        s = "-----\nDiGraph: \nNodes: (Total of " + str(self.v_size()) + " nodes.\n"
         for n in self.nodes.values():
-            s += "id: " + str(n.getKey()) + '\n'
-        s += "Num of edges: " + str(self.NumOfEdges) + '\n'
+            s += str(n.getKey()) + ', '
+        s += "\nEdges: (Total of " + str(self.e_size()) + " edges.\n"
+        for e in self.get_all_e():
+            s += "edge src: " + str(e.getSrc()) + ", dest: " + str(e.getDest()) + ", w: " + str(e.getWeight()) + '\n'
         s += "Num of MC: " + str(self.ModeCount) + "\n-----"
         return s
 
