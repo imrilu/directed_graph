@@ -114,3 +114,4 @@ if __name__ == '__main__':
     g_algo.connected_component(0)
     end = time.time()
     print("time:", end - start)
+    check()

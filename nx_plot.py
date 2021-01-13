@@ -23,5 +23,5 @@ def plot_graph_nx(graph):
                            node_color=values, node_size=500)
     nx.draw_networkx_labels(G, pos)
     nx.draw_networkx_edges(G, pos, edgelist=black_edges, arrows=True)
-    # plt.show()
+    plt.show()
 

@@ -250,7 +250,7 @@ class GraphAlgo(GraphAlgoInterface):
                          color='r')
         for circle in nodes_graphics:
             ax.add_artist(circle)
-        # plt.show()
+        plt.show()
 
     class Node:
         """
