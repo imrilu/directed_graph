@@ -178,7 +178,7 @@ class DiGraph(GraphInterface):
 
     def get_mc(self):
         """
-        Returns the Mode Count - for testing changes in the graph.
+        Returns the Mode Count - for tests changes in the graph.
         """
         return self.ModeCount
 
@@ -195,7 +195,6 @@ class DiGraph(GraphInterface):
             if other.getNode(i) != self.nodes[i]:
                 return False
         return True
-
 
     def __repr__(self):
         """

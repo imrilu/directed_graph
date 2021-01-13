@@ -67,7 +67,7 @@ def check1():
 
 
 def check2():
-    """ This function tests the naming, basic testing over A5 json file.
+    """ This function tests the naming, basic tests over A5 json file.
       :return:
       """
     g_algo = GraphAlgo()

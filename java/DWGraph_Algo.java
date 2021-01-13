@@ -33,6 +33,51 @@ public class DWGraph_Algo implements dw_graph_algorithms {
 	public DWGraph_Algo(directed_weighted_graph g) {
 		dwg_alg = g;
 	}
+
+
+	/***
+	 * Finds the Strongly Connected Component(SCC) that node id1 is a part of.
+	 * @param id1 src id
+	 * @return the SCC of id1
+	 */
+	public Set<Integer> connectedComponent(int id1) {
+    	node_data node = dwg_alg.getNode(id1);
+    	if (node != null) {
+    		Dijkstra(node);
+    		Set<Integer> component = new HashSet<>();
+    		component.add(id1);
+    		ArrayList<Integer> reachable = new ArrayList<>();
+    		for (int key : d1.keySet()) {
+    			if (d1.get(key) < Double.POSITIVE_INFINITY) {
+					reachable.add(key);
+				}
+			}
+			for (int i = 0; i < reachable.size(); i++) {
+    			if (shortestPathDist(reachable.get(i), id1) < Double.POSITIVE_INFINITY) {
+    				component.add(reachable.get(i));
+				}
+			}
+			return component;
+		}
+		return null;
+	}
+
+	/**
+	 * Finds all the Strongly Connected Component(SCC) in the graph
+	 * @return a list of all the SCC in graph
+	 */
+	public ArrayList<ArrayList<Integer>> connectedComponents() {
+		ArrayList<node_data> nodes = new ArrayList<>(dwg_alg.getV());
+		ArrayList<ArrayList<Integer>> SCC = new ArrayList<>();
+		while (!nodes.isEmpty()) {
+			ArrayList<Integer> component = new ArrayList<>(connectedComponent(nodes.get(0).getKey()));
+			SCC.add(component);
+			for (int i = 0; i < component.size(); i++) {
+				nodes.remove(dwg_alg.getNode(component.get(i)));
+			}
+		}
+		return SCC;
+	}
 	
 	/**
      * Init the graph on which this set of algorithms operates on.
